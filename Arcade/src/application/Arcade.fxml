@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="800.0" prefWidth="800.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ArcadeController">
+   <children>
+      <TabPane prefHeight="800.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Utilisateur">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="771.0" prefWidth="800.0">
+                     <children>
+                        <Label layoutX="307.0" layoutY="25.0" text="Utilisateurs">
+                           <font>
+                              <Font name="Rockwell" size="36.0" />
+                           </font>
+                        </Label>
+                        <ComboBox fx:id="cboUtilisateur" layoutX="212.0" layoutY="147.0" onAction="#confirmezChoix" prefHeight="42.0" prefWidth="377.0" />
+                        <Label layoutX="256.0" layoutY="84.0" text="Choissisez un utilisateur">
+                           <font>
+                              <Font name="Rockwell" size="26.0" />
+                           </font>
+                        </Label>
+                        <Button layoutX="295.0" layoutY="224.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="212.0" text="Ajoutez un utilisateur">
+                           <font>
+                              <Font name="Rockwell" size="12.0" />
+                           </font>
+                        </Button>
+                        <GridPane layoutX="50.0" layoutY="296.0" prefHeight="172.0" prefWidth="700.0">
+                           <children>
+                              <Label prefHeight="45.0" prefWidth="350.0" text="Nom">
+                                 <font>
+                                    <Font name="Rockwell" size="25.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="45.0" prefWidth="350.0" text="Surnom" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font name="Rockwell" size="25.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="45.0" prefWidth="350.0" text="Crédits" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font name="Rockwell" size="25.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="45.0" prefWidth="350.0" text="Points" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font name="Rockwell" size="25.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="txtFNom" prefHeight="43.0" prefWidth="559.0" GridPane.columnIndex="1" />
+                              <TextField fx:id="txtFSurnom" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <Label fx:id="lblCredits" alignment="CENTER" prefHeight="43.0" prefWidth="432.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font name="Rockwell" size="25.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="lblPoints" alignment="CENTER" prefHeight="43.0" prefWidth="435.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font name="Rockwell" size="25.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="353.0" minWidth="10.0" prefWidth="196.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="574.0" minWidth="10.0" prefWidth="332.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                        </GridPane>
+                        <HBox layoutX="154.0" layoutY="488.0" spacing="50.0">
+                           <children>
+                              <Button fx:id="btnAjoutezCredits1" layoutX="150.0" layoutY="482.0" mnemonicParsing="false" text="Achetez 1 Crédit" />
+                              <Button fx:id="btnAjoutezCredits2" layoutX="338.0" layoutY="482.0" mnemonicParsing="false" text="Achetez 5 Crédits" />
+                              <Button fx:id="btnAjoutezCredits3" layoutX="527.0" layoutY="482.0" mnemonicParsing="false" text="Achetez 69 Crédits" />
+                           </children>
+                        </HBox>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Liste des Utilisateurs">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="771.0" prefWidth="800.0">
+                     <children>
+                        <Label layoutX="307.0" layoutY="34.0" text="Utilisateurs">
+                           <font>
+                              <Font name="Rockwell" size="36.0" />
+                           </font>
+                        </Label>
+                        <TableView fx:id="utilisateursTable" layoutX="50.0" layoutY="100.0" prefHeight="350.0" prefWidth="700.0">
+                          <columns>
+                            <TableColumn fx:id="colNom" prefWidth="175.0" text="Nom" />
+                            <TableColumn fx:id="colSurnom" prefWidth="175.0" text="Surnom" />
+                              <TableColumn fx:id="colCredits" prefWidth="175.0" text="Crédits" />
+                              <TableColumn fx:id="colPoints" prefWidth="175.0" text="Points" />
+                          </columns>
+                        </TableView>
+                        <GridPane layoutX="50.0" layoutY="468.0" prefHeight="172.0" prefWidth="700.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="353.0" minWidth="10.0" prefWidth="154.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="562.0" minWidth="10.0" prefWidth="42.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="562.0" minWidth="10.0" prefWidth="40.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="562.0" minWidth="10.0" prefWidth="29.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="562.0" minWidth="10.0" prefWidth="459.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label prefHeight="45.0" prefWidth="350.0" text="Nom">
+                                 <font>
+                                    <Font name="Rockwell" size="25.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="45.0" prefWidth="350.0" text="Surnom" GridPane.rowIndex="1">
+                                 <font>
+                                    <Font name="Rockwell" size="25.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="45.0" prefWidth="350.0" text="Crédits" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font name="Rockwell" size="25.0" />
+                                 </font>
+                              </Label>
+                              <Label prefHeight="45.0" prefWidth="350.0" text="Points" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font name="Rockwell" size="25.0" />
+                                 </font>
+                              </Label>
+                              <Button fx:id="btnCredits1" mnemonicParsing="false" prefHeight="45.0" prefWidth="49.0" styleClass="success" text="+" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="btnCredits2" mnemonicParsing="false" prefHeight="45.0" prefWidth="49.0" styleClass="danger" text="-" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="btnPoints1" mnemonicParsing="false" prefHeight="45.0" prefWidth="49.0" styleClass="success" text="+" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="btnPoints2" mnemonicParsing="false" prefHeight="45.0" prefWidth="49.0" styleClass="danger" text="-" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                                 <font>
+                                    <Font size="20.0" />
+                                 </font>
+                              </Button>
+                              <TextField fx:id="txtNom" prefHeight="51.0" prefWidth="456.0" GridPane.columnIndex="4" />
+                              <TextField fx:id="txtSurnom" prefHeight="51.0" prefWidth="456.0" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtCredits" prefHeight="51.0" prefWidth="456.0" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                              <TextField fx:id="txtPoints" prefHeight="51.0" prefWidth="456.0" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                           </children>
+                        </GridPane>
+                        <HBox layoutX="67.0" layoutY="676.0" spacing="50.0">
+                           <children>
+                              <Button fx:id="btnAjouter" layoutX="135.0" layoutY="677.0" mnemonicParsing="false" onAction="#ajouterUtilisateur" prefHeight="49.0" prefWidth="129.0" styleClass="success" text="Ajouter">
+                                 <font>
+                                    <Font name="Rockwell" size="16.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="btnModifier" layoutX="271.0" layoutY="677.0" mnemonicParsing="false" onAction="#updateUtilisateur" prefHeight="49.0" prefWidth="129.0" styleClass="warning" text="Modifier">
+                                 <font>
+                                    <Font name="Rockwell" size="16.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="btnEffacer" layoutX="408.0" layoutY="677.0" mnemonicParsing="false" onAction="#deleteUtilisateur" prefHeight="49.0" prefWidth="129.0" styleClass="danger" text="Effacer">
+                                 <font>
+                                    <Font name="Rockwell" size="16.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="btnRecommencer" layoutX="551.0" layoutY="677.0" mnemonicParsing="false" onAction="#clearFields" prefHeight="49.0" prefWidth="129.0" styleClass="info" text="Recommencer">
+                                 <font>
+                                    <Font name="Rockwell" size="16.0" />
+                                 </font>
+                              </Button>
+                           </children>
+                        </HBox>
+                        <MenuBar layoutY="-1.0">
+                          <menus>
+                            <Menu mnemonicParsing="false" text="File">
+                              <items>
+                                    <MenuItem mnemonicParsing="false" onAction="#handleNew" text="Nouveau" />
+                                <MenuItem mnemonicParsing="false" onAction="#handleOpen" text="Ouvrir" />
+                                    <MenuItem mnemonicParsing="false" onAction="#handleSave" text="Sauvegarder" />
+                                    <MenuItem mnemonicParsing="false" onAction="#handleSaveAs" text="Sauvegarder Sous" />
+                              </items>
+                            </Menu>
+                          </menus>
+                        </MenuBar>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>
