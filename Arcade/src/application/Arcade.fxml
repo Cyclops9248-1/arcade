@@ -87,7 +87,7 @@
                      </children></AnchorPane>
             </content>
           </Tab>
-          <Tab text="Liste des Utilisateurs">
+          <Tab text="Liste des Utilisateurs (adiministrateur)">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="771.0" prefWidth="800.0">
                      <children>
