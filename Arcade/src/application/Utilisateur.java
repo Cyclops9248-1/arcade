@@ -1,3 +1,9 @@
+/* Auteur: Zachary Xie
+ * Application: Arcade
+ * Cette classe est un utilisateur, qui comporte un nom, surnom, crédits et les points.
+ * 
+ */
+
 package application;
 
 public class Utilisateur {
@@ -7,6 +13,7 @@ public class Utilisateur {
 	private int credits;
 	private int points;
 	
+	// Constucteur défaut
 	public Utilisateur() {
 		nom = "";
 		surnom = "";
@@ -14,20 +21,7 @@ public class Utilisateur {
 		points = 0;
 	}
 	
-	public Utilisateur(String _nom, String _surnom) {
-		nom = _nom;
-		surnom = _surnom;
-		credits = 0;
-		points = 0;
-	}
-	
-	public Utilisateur(String _nom, String _surnom, int _credits) {
-		nom = _nom;
-		surnom = _surnom;
-		credits = _credits;
-		points = 0;
-	}
-	
+	// Constucteurs utilisé quand quelqu'un crée un compte
 	public Utilisateur(String _nom, String _surnom, int _credits, int _points) {
 		nom = _nom;
 		surnom = _surnom;
@@ -42,6 +36,7 @@ public class Utilisateur {
 		points = Integer.parseInt(_points);
 	}
 	
+	// Méthodes pour chercher les variables
 	public String getNom() {
 		return nom;
 	}
@@ -58,6 +53,7 @@ public class Utilisateur {
 		return points;
 	}
 	
+	// Méthodes pour modifier les variables
 	public void setNom(String param) {
 		nom = param;
 	}
@@ -74,9 +70,17 @@ public class Utilisateur {
 		points = param;
 	}
 	
+	// Tourne le classe en un string; un façon de démontrer le nom et surnom de l'utilisateur quand l'utilisateur choisit un compte
 	public String toString() {
 		return surnom + ": " + nom;
 	}
 	
+	// Ajoute des crédits/points
+	public void addCredits(int montant) {
+		credits += montant;
+	}
 	
+	public void addPoints(int montant) {
+		points += montant;
+	}
 }

@@ -1,3 +1,9 @@
+/* Auteur: Zachary Xie
+ * Application: Arcade
+ * Cette classe est pour commencer l'application.
+ * 
+ */
+
 package application;
 	
 import javafx.application.Application;
@@ -6,7 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.fxml.FXMLLoader;
 
-
+// Commence l'application; ouvre le fênetre ArcadeController
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {

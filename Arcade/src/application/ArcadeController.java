@@ -1,6 +1,15 @@
+/* Auteur: Zachary Xie
+ * Application: Arcade
+ * Cette classe est le controller de l'interface principal du arcade, ou il y a deux paneaux:
+ * Un pour l'utilisateur, ou tu peux créer un nouveau utilisateur, choisir un utilisateur et acheter plus de crédits pour jouer au Snake.
+ * L'autre est pour l'administrateur, qui peut ajouter, modifier et effacer des utilisateurs. 
+ * 
+ */
+
 package application;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
@@ -12,7 +21,9 @@ import javax.xml.bind.Unmarshaller;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -22,10 +33,14 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Stage;
 
 public class ArcadeController implements Initializable {
+	
+	//Variables FXML
 
 	@FXML
     private TableView<Utilisateur> utilisateursTable;
@@ -44,18 +59,6 @@ public class ArcadeController implements Initializable {
 
     @FXML
     private TableColumn<Utilisateur, Integer> colPoints;
-
-    @FXML
-    private Button btnCredits2;
-
-    @FXML
-    private Button btnPoints1;
-
-    @FXML
-    private Button btnPoints2;
-
-    @FXML
-    private Button btnCredits1;
 
     @FXML
     private Button btnEffacer;
@@ -105,12 +108,17 @@ public class ArcadeController implements Initializable {
     @FXML
     private Label lblPoints;
     
+    @FXML
+    private Button btnJouez;
+    
+    // Données des utilisateurs pour le tableau et combobox
     public ObservableList<Utilisateur> utilisateurData = FXCollections.observableArrayList(); 
     
-    public ObservableList<Utilisateur> getEtudiantData(){
+    public ObservableList<Utilisateur> getUtilisateurData(){
     	return utilisateurData;
     }
-
+    
+    // Préparations Initiales
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
@@ -129,6 +137,105 @@ public class ArcadeController implements Initializable {
 				observable, oldValue, newValue)-> showUtilisateur(newValue));
 	}
 	
+	// Panneau Utilisateur
+	
+	// Dans le fiche d'utilisateur - ajoute un nouveau utilisateur. Il peut fixer le nom, surnom et montant de crédits, mais pas les points,
+	// car tu dois gagner les points en jouant les jeux.
+	public void ajouterUtilisateurAlt(String nom, String surnom, int credits) {
+		Utilisateur tmp = new Utilisateur(nom,surnom,credits,0);
+		
+		utilisateurData.add(tmp);
+		
+		cboUtilisateur.setItems(utilisateurData);
+	}
+	
+	// Confirmez le choix de compte
+	@FXML
+	public void confirmezChoix() {
+		btnJouez.setDisable(false);
+		btnAjoutezCredits1.setDisable(false);
+		btnAjoutezCredits2.setDisable(false);
+		btnAjoutezCredits3.setDisable(false);
+		refreshAll();
+	}
+	
+	// Refreshe le texte dans le paneau d'utilisateur et le tableau
+	public void refreshAll() {
+		Utilisateur u = cboUtilisateur.getValue();
+		if(u != null) {
+			txtFNom.setText(u.getNom());
+			txtFSurnom.setText(u.getSurnom());
+			lblCredits.setText("" + u.getCredits());
+			lblPoints.setText("" + u.getPoints());
+		}
+		
+		utilisateursTable.refresh();
+	}
+	
+	// FXML méthodes pour ajouter des crédits, qui appelle une autre méthode avec des différentes paramètres
+	@FXML
+	public void AjoutezCredits1() {
+		ModifierCredits(1);
+	}
+	
+	@FXML
+	public void AjoutezCredits2() {
+		ModifierCredits(5);
+	}
+	
+	@FXML
+	public void AjoutezCredits3() {
+		ModifierCredits(20);
+	}
+	
+	// Augmente le montant de crédits et modifie le texte
+	void ModifierCredits(int montant) {
+		cboUtilisateur.getValue().addCredits(montant);
+		lblCredits.setText("" + cboUtilisateur.getValue().getCredits());
+		refreshAll();
+	}
+	
+	// Ouvre un fênetre pour créer un nouveau utilisateur
+	@FXML
+	void handleNewUtilisateur() {
+		try {
+			FXMLLoader loader = new FXMLLoader(Main.class.getResource("NouveauUtilisateur.fxml"));
+			AnchorPane pane = loader.load();
+			Scene scene = new Scene(pane);
+			NouveauUtilisateurController nouveauUtilisateur = loader.getController();
+			nouveauUtilisateur.controller = this;
+			Stage stage = new Stage();
+			stage.setScene(scene);
+			stage.setTitle("Nouveau Utilisateur");
+			stage.show();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// Ouvre un fênetre pour jouer Snake
+	@FXML
+	void jouerSnake() {
+		try {
+			FXMLLoader loader = new FXMLLoader(Main.class.getResource("Snake.fxml"));
+			AnchorPane pane = loader.load();
+			Scene scene = new Scene(pane);
+			SnakeController snakeController = loader.getController();
+			snakeController.SetUtilisateur(cboUtilisateur.getValue());
+			snakeController.setArcadeController(this);
+			Stage stage = new Stage();
+			stage.setScene(scene);
+			stage.setTitle("Jouez Snake");
+			stage.show();
+		} catch(IOException e) {
+			e.printStackTrace();
+		}
+	}
+		
+	
+	// Panneau Administrateur
+	
+	// Efface les inputs dans la liste des utilisateurs
 	@FXML
 	void clearFields() {
 		txtNom.setText("");
@@ -137,7 +244,7 @@ public class ArcadeController implements Initializable {
 		txtPoints.setText("");
 	}
 	
-	@FXML
+	// Montre l'utilisateur sélectionné
 	void showUtilisateur(Utilisateur utilisateur) {
 		if(utilisateur != null) {
 			txtNom.setText(utilisateur.getNom());
@@ -150,15 +257,26 @@ public class ArcadeController implements Initializable {
 		}
 	}
 	
+	// Ajoute un nouveau utilisateur parmi les boîtes de textes
 	@FXML
 	void ajouterUtilisateur() {
-		Utilisateur tmp = new Utilisateur(txtNom.getText(),txtSurnom.getText(),txtCredits.getText(),txtPoints.getText());
-		
-		utilisateurData.add(tmp);
-		
-		cboUtilisateur.setItems(utilisateurData);
+		try {
+			Utilisateur tmp = new Utilisateur(txtNom.getText(),txtSurnom.getText(),txtCredits.getText(),txtPoints.getText());
+			utilisateurData.add(tmp);
+			cboUtilisateur.setItems(utilisateurData);
+			refreshAll();
+		}
+		catch(Exception e){
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Erreur");
+			alert.setHeaderText("Les données sont incomplètes");
+			alert.setContentText("Tu dois remplir toutes les cases pour créer un utilisateur");
+			alert.showAndWait();
+		}	
 	}
 	
+	
+	// Modifie l'utiliisateur sélectionné
 	@FXML
 	public void updateUtilisateur() {
 		Utilisateur utilisateur = utilisateursTable.getSelectionModel().getSelectedItem();
@@ -168,11 +286,12 @@ public class ArcadeController implements Initializable {
 		utilisateur.setCredits(Integer.parseInt(txtCredits.getText()));
 		utilisateur.setPoints(Integer.parseInt(txtPoints.getText()));
 		
-		utilisateursTable.refresh();
+		refreshAll();
 		
 		cboUtilisateur.setItems(utilisateurData);
 	}
 	
+	// Efface l'utiliisateur sélectionné
 	@FXML
 	public void deleteUtilisateur() {
 		int selectedIndex = utilisateursTable.getSelectionModel().getSelectedIndex();
@@ -183,18 +302,31 @@ public class ArcadeController implements Initializable {
 		cboUtilisateur.setItems(utilisateurData);
 	}
 	
+	
+	
+	// Vérifie que l'input des crédits est valide
 	@FXML
-	public void confirmezChoix() {
-		Utilisateur u = cboUtilisateur.getValue();
-		
-		txtFNom.setText(u.getNom());
-		txtFSurnom.setText(u.getSurnom());
-		lblCredits.setText("" + u.getCredits());
-		lblPoints.setText("" + u.getPoints());
+	public void verifCredits() {
+		txtCredits.textProperty().addListener((observable, oldValue, newValue)->{
+			if(!newValue.matches("^[0-9](\\.[0-9]+)?$")) {
+				txtCredits.setText(newValue.replaceAll("[^\\d*\\.]", ""));
+			}
+		});
 	}
 	
+	// Vérifie que l'input des points est valide
+	@FXML
+	public void verifPoints() {
+		txtCredits.textProperty().addListener((observable, oldValue, newValue)->{
+			if(!newValue.matches("^[0-9](\\.[0-9]+)?$")) {
+				txtPoints.setText(newValue.replaceAll("[^\\d*\\.]", ""));
+			}
+		});
+	}
+
 	//Sauvegarde des données
 	
+	// Retourne le path ou le document .xml est localisée
 	public File getUtilisateurFilePath() {
 		Preferences prefs = Preferences.userNodeForPackage(Main.class);
 		String filePath = prefs.get("filePath", null);
@@ -208,6 +340,7 @@ public class ArcadeController implements Initializable {
 			
 	}
 	
+	// Défenit le path du document .xml dans les préferences du classe
 	public void setUtilisateurFilePath(File file) {
 		Preferences prefs = Preferences.userNodeForPackage(Main.class);
 		if(file != null) {
@@ -218,6 +351,7 @@ public class ArcadeController implements Initializable {
 		}
 	}
 	
+	// Affiche les données du document .xml dans le variable utilisateurData
 	public void loadUtilisateurDataFromFile(File file) {
 		try {
 			JAXBContext context = JAXBContext.newInstance(UtilisateurListWrapper.class);
@@ -235,6 +369,7 @@ public class ArcadeController implements Initializable {
 		}
 	}
 	
+	// Sauve les données dans le utilisateurData dans un document .xml
 	public void saveUtilisateurDataToFile(File file) {
 		try {
 			JAXBContext context = JAXBContext.newInstance(UtilisateurListWrapper.class);
@@ -256,12 +391,14 @@ public class ArcadeController implements Initializable {
 		}
 	}
 	
+	// Crée un nouveau document
 	@FXML
 	private void handleNew() {
-		getEtudiantData().clear();
+		getUtilisateurData().clear();
 		setUtilisateurFilePath(null);
 	}
 	
+	// Ouvre un document
 	@FXML
 	private void handleOpen() {
 		FileChooser fileChooser = new FileChooser();
@@ -278,6 +415,7 @@ public class ArcadeController implements Initializable {
 		
 	}
 	
+	// Sauvegarde un document
 	@FXML
 	private void handleSave() {
 		
@@ -290,6 +428,7 @@ public class ArcadeController implements Initializable {
 		}
 	}
 	
+	// Sauvegarde dans un nouveau document
 	@FXML
 	private void handleSaveAs() {
 		FileChooser fileChooser = new FileChooser();
@@ -306,5 +445,7 @@ public class ArcadeController implements Initializable {
 			saveUtilisateurDataToFile(file);
 		}
 	}
+	
+	
 
 }

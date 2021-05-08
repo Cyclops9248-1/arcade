@@ -1,3 +1,9 @@
+/* Auteur: Zachary Xie
+ * Application: Arcade
+ * Cette classe est un utilisateur, qui comporte un nom, surnom, crédits et les points.
+ * 
+ */
+
 package application;
 
 import java.util.List;
