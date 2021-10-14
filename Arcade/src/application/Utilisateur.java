@@ -23,7 +23,8 @@ public class Utilisateur {
 	}
 	
 	// Constucteurs utilisé quand quelqu'un crée un compte
-	public Utilisateur(String _nom, String _surnom, int _credits, int _points) {
+	public Utilisateur(int _ID, String _nom, String _surnom, int _credits, int _points) {
+		ID = _ID;
 		nom = _nom;
 		surnom = _surnom;
 		credits = _credits;
@@ -55,6 +56,10 @@ public class Utilisateur {
 	}
 	
 	// Méthodes pour modifier les variables
+	public void setID(int param) {
+		ID = param;
+	}
+	
 	public void setNom(String param) {
 		nom = param;
 	}

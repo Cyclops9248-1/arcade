@@ -11,6 +11,7 @@ package application;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
 
@@ -112,46 +113,65 @@ public class ArcadeController implements Initializable {
     private Button btnJouez;
     
     // Données des utilisateurs pour le tableau et combobox
-    public ObservableList<Utilisateur> utilisateurData = FXCollections.observableArrayList(); 
+    //public ObservableList<Utilisateur> utilisateurData = FXCollections.observableArrayList(); 
+    
+    private	ObservableList<Utilisateur> UtilisateurList;
     
     public ObservableList<Utilisateur> getUtilisateurData(){
-    	return utilisateurData;
+    	return UtilisateurList;
     }
     
     // Préparations Initiales
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// TODO Auto-generated method stub
-		colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
-		colSurnom.setCellValueFactory(new PropertyValueFactory<>("surnom"));
-		colCredits.setCellValueFactory(new PropertyValueFactory<>("credits"));
-		colPoints.setCellValueFactory(new PropertyValueFactory<>("points"));
 		
-		utilisateursTable.setItems(utilisateurData);
+		try {
+			UtilisateurList = ArcadeDAO.getAllRecords();
+			colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
+			colSurnom.setCellValueFactory(new PropertyValueFactory<>("surnom"));
+			colCredits.setCellValueFactory(new PropertyValueFactory<>("credits"));
+			colPoints.setCellValueFactory(new PropertyValueFactory<>("points"));
+			
+			utilisateursTable.setItems(UtilisateurList);
+			
+			cboUtilisateur.setItems(UtilisateurList);
+			
+			showUtilisateur(null);
+			
+			utilisateursTable.getSelectionModel().selectedItemProperty().addListener((
+					observable, oldValue, newValue)-> showUtilisateur(newValue));
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		
-		cboUtilisateur.setItems(utilisateurData);
 		
-		showUtilisateur(null);
+	}
+	
+	@FXML
+	public void reinitialiser()throws ClassNotFoundException, SQLException
+	{
+		UtilisateurList = ArcadeDAO.getAllRecords();
+		cboUtilisateur.setItems(UtilisateurList);
 		
-		utilisateursTable.getSelectionModel().selectedItemProperty().addListener((
-				observable, oldValue, newValue)-> showUtilisateur(newValue));
 	}
 	
 	// Panneau Utilisateur
 	
 	// Dans le fiche d'utilisateur - ajoute un nouveau utilisateur. Il peut fixer le nom, surnom et montant de crédits, mais pas les points,
 	// car tu dois gagner les points en jouant les jeux.
-	public void ajouterUtilisateurAlt(String nom, String surnom, int credits) {
-		Utilisateur tmp = new Utilisateur(nom,surnom,credits,0);
+	public void ajouterUtilisateurAlt(String nom, String surnom, int credits) throws ClassNotFoundException, SQLException {
 		
-		utilisateurData.add(tmp);
+		ArcadeDAO.insertUtilisateur(nom, surnom, credits, 0);
 		
-		cboUtilisateur.setItems(utilisateurData);
+		reinitialiser();
 	}
 	
 	// Confirmez le choix de compte
 	@FXML
-	public void confirmezChoix() {
+	public void confirmezChoix() throws ClassNotFoundException, SQLException {
 		btnJouez.setDisable(false);
 		btnAjoutezCredits1.setDisable(false);
 		btnAjoutezCredits2.setDisable(false);
@@ -160,7 +180,7 @@ public class ArcadeController implements Initializable {
 	}
 	
 	// Refreshe le texte dans le paneau d'utilisateur et le tableau
-	public void refreshAll() {
+	public void refreshAll() throws ClassNotFoundException, SQLException {
 		Utilisateur u = cboUtilisateur.getValue();
 		if(u != null) {
 			txtFNom.setText(u.getNom());
@@ -168,28 +188,28 @@ public class ArcadeController implements Initializable {
 			lblCredits.setText("" + u.getCredits());
 			lblPoints.setText("" + u.getPoints());
 		}
-		
+		reinitialiser();
 		utilisateursTable.refresh();
 	}
 	
 	// FXML méthodes pour ajouter des crédits, qui appelle une autre méthode avec des différentes paramètres
 	@FXML
-	public void AjoutezCredits1() {
+	public void AjoutezCredits1() throws ClassNotFoundException, SQLException {
 		ModifierCredits(1);
 	}
 	
 	@FXML
-	public void AjoutezCredits2() {
+	public void AjoutezCredits2() throws ClassNotFoundException, SQLException {
 		ModifierCredits(5);
 	}
 	
 	@FXML
-	public void AjoutezCredits3() {
+	public void AjoutezCredits3() throws ClassNotFoundException, SQLException {
 		ModifierCredits(20);
 	}
 	
 	// Augmente le montant de crédits et modifie le texte
-	void ModifierCredits(int montant) {
+	void ModifierCredits(int montant) throws ClassNotFoundException, SQLException {
 		cboUtilisateur.getValue().addCredits(montant);
 		lblCredits.setText("" + cboUtilisateur.getValue().getCredits());
 		refreshAll();
@@ -259,11 +279,10 @@ public class ArcadeController implements Initializable {
 	
 	// Ajoute un nouveau utilisateur parmi les boîtes de textes
 	@FXML
-	void ajouterUtilisateur() {
+	void ajouterUtilisateur() throws ClassNotFoundException, SQLException {
 		try {
-			Utilisateur tmp = new Utilisateur(txtNom.getText(),txtSurnom.getText(),txtCredits.getText(),txtPoints.getText());
-			utilisateurData.add(tmp);
-			cboUtilisateur.setItems(utilisateurData);
+			ArcadeDAO.insertUtilisateur(txtNom.getText(),txtSurnom.getText(),Integer.parseInt(txtCredits.getText()),Integer.parseInt(txtPoints.getText()));
+			cboUtilisateur.setItems(UtilisateurList);
 			refreshAll();
 		}
 		catch(Exception e){
@@ -278,22 +297,16 @@ public class ArcadeController implements Initializable {
 	
 	// Modifie l'utiliisateur sélectionné
 	@FXML
-	public void updateUtilisateur() {
-		Utilisateur utilisateur = utilisateursTable.getSelectionModel().getSelectedItem();
-		
-		utilisateur.setNom(txtNom.getText());
-		utilisateur.setSurnom(txtSurnom.getText());
-		utilisateur.setCredits(Integer.parseInt(txtCredits.getText()));
-		utilisateur.setPoints(Integer.parseInt(txtPoints.getText()));
+	public void updateUtilisateur() throws ClassNotFoundException, SQLException {		
+		ArcadeDAO.updateUtilisateur(0, txtNom.getText(), txtSurnom.getText(), Integer.parseInt(txtCredits.getText()), Integer.parseInt(txtPoints.getText()));
 		
 		refreshAll();
 		
-		cboUtilisateur.setItems(utilisateurData);
 	}
 	
 	// Efface l'utiliisateur sélectionné
 	@FXML
-	public void deleteUtilisateur() {
+	public void deleteUtilisateur() throws ClassNotFoundException, SQLException {
 		int selectedIndex = utilisateursTable.getSelectionModel().getSelectedIndex();
 		if(selectedIndex >= 0) {
 			utilisateursTable.getItems().remove(selectedIndex);
@@ -327,6 +340,7 @@ public class ArcadeController implements Initializable {
 	//Sauvegarde des données
 	
 	// Retourne le path ou le document .xml est localisée
+	/*
 	public File getUtilisateurFilePath() {
 		Preferences prefs = Preferences.userNodeForPackage(Main.class);
 		String filePath = prefs.get("filePath", null);
@@ -446,6 +460,6 @@ public class ArcadeController implements Initializable {
 		}
 	}
 	
-	
+	*/
 
 }
