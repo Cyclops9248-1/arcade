@@ -8,6 +8,7 @@ package application;
 
 public class Utilisateur {
 	
+	private int ID;
 	private String nom;
 	private String surnom;
 	private int credits;

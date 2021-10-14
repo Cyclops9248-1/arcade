@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="800.0" prefWidth="800.0" stylesheets="@bootstrap3.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ArcadeController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="600.0" prefWidth="600.0" scaleX="0.75" scaleY="0.75" stylesheets="@bootstrap3.css" translateX="-100.0" translateY="-100.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.ArcadeController">
    <children>
       <TabPane prefHeight="800.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
@@ -14,7 +14,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="771.0" prefWidth="800.0">
                      <children>
-                        <Label layoutX="314.0" layoutY="27.0" text="Bienvenue">
+                        <Label layoutX="314.0" layoutY="27.0" text="Bienvenue" AnchorPane.bottomAnchor="666.0">
                            <font>
                               <Font name="Rockwell" size="36.0" />
                            </font>
