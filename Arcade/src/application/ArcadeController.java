@@ -312,7 +312,7 @@ public class ArcadeController implements Initializable {
 			utilisateursTable.getItems().remove(selectedIndex);
 		}
 		
-		cboUtilisateur.setItems(utilisateurData);
+		cboUtilisateur.setItems(UtilisateurList);
 	}
 	
 	
